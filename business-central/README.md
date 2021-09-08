@@ -38,7 +38,7 @@ This showcase image contains default users and roles:
 
     USER        PASSWORD    ROLE
     *************************************************
-    wbadmin     wbadmin     admin,analyst,user,process-admin,kie-server
+    admin       admin       admin,analyst,user,process-admin,kie-server
     krisv       krisv       admin,analyst,user,process-admin,kie-server
     john        john        analyst,Accounting,PM,kie-server
     sales-rep   sales-rep   analyst,sales,kie-server
