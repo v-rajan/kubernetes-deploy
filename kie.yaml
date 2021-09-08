@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kie-wb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kie-wb
+  template:
+    metadata:
+      labels:
+        app: kie-wb
+    spec:
+      containers:
+        - name: kie-wb
+          image: jboss/business-central-workbench-showcase:7.54.0.Final
+          ports:
+            - containerPort: 8080
+            - containerPort: 8001
+          securityContext:
+            privileged: true
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: kie-wb
+spec:
+  selector:
+    app: kie-wb
+  ports:
+    - name: "8080"
+      port: 8080
+      targetPort: 8080
+    - name: "8001"
+      port: 8001
+      targetPort: 8001
+  # type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kie-wb-np
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 31001
+  selector:
+    app: kie-wb
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kie-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kie
+  template:
+    metadata:
+      labels:
+        app: kie
+    spec:
+      containers:
+        - name: kie
+          image: jboss/kie-server-showcase:7.54.0.Final
+          ports:
+            - containerPort: 8080
+          securityContext:
+            privileged: true
+          env:
+            - name: KIE_WB_ENV_KIE_CONTEXT_PATH
+              value: "business-central"
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: kie-server
+spec:
+  selector:
+    app: kie
+  ports:
+    - name: "8080"
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kie-server-np
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 31002
+  selector:
+    app: kie
+# type: LoadBalancer
