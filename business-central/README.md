@@ -27,7 +27,7 @@ kie-wb-np       NodePort    10.232.4.8      <none>        8080:31001/TCP      5s
 
 ### Usage
 
-http://10.232.4.8:8080/business-central
+http://10.232.4.8:31001/business-central
 
 ![solution](doc/images/business-central-01.png)
 
