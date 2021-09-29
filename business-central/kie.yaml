@@ -12,14 +12,44 @@ spec:
       labels:
         app: kie-wb
     spec:
+      volumes:
+      # EFS mapped directory
+      - name: nfs
+        persistentVolumeClaim:
+          claimName: nfs
       containers:
         - name: kie-wb
-          image: jboss/business-central-workbench-showcase:7.54.0.Final
+          image: scb-docker-registry/business-central-workbench-ha
           ports:
             - containerPort: 8080
-            - containerPort: 8001
+            - containerPort: 9990
+            - containerPort: 7600
+            - containerPort: 8888
           securityContext:
             privileged: true
+          volumeMounts:
+            - name: nfs
+              mountPath: "/data/niogit"
+          env:
+            - name: KUBERNETES_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: JGROUPS_PING_PROTOCOL
+              value: "dns.DNS_PING"
+            - name: DNS_PING_SERVICE_NAME
+              value: "kie-wb-ping-service"        
+            - name: AMQ_HOST
+              value: "10.232.14.192"
+            - name: AMQ_USER
+              value: "admin"
+            - name: AMQ_PASSWORD
+              value: "admin"
 ---
 kind: Service
 apiVersion: v1
@@ -32,10 +62,16 @@ spec:
     - name: "8080"
       port: 8080
       targetPort: 8080
-    - name: "8001"
-      port: 8001
-      targetPort: 8001
-  # type: LoadBalancer
+    - name: "9990"
+      port: 9990
+      targetPort: 9990
+    - name: "9993"
+      port: 9993
+      targetPort: 9993
+    - name: "8787"
+      port: 8787
+      targetPort: 8787
+  #type: LoadBalancer
 ---
 apiVersion: v1
 kind: Service
