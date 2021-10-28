@@ -1,0 +1,22 @@
+$ kubectl get pods
+NAME                          READY   STATUS    RESTARTS   AGE
+kie-server-5dd8d58d8b-xfvr4   2/2     Running   0          12h
+kie-wb-c6848fbdb-bhhhx        2/2     Running   0          12h
+
+
+$ kubectl exec -it kie-wb-c6848fbdb-bhhhx bash
+
+[jboss@kie-wb-c6848fbdb-bhhhx bin]$ ps aux
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+jboss          1  0.0  0.0  11820  2760 ?        Ss   Oct27   0:00 /bin/sh /opt/jboss/wildfly/bin/standalone.sh -c standalone-ha.xml -Dorg.uberfire.nio.git.dir=/data/niogit -Dappformer-jms-connection-mode=REMOTE -Dappformer-jms-url=tcp://
+jboss        104  0.8 13.0 3745780 1740760 ?     Sl   Oct27   6:18 /usr/lib/jvm/java/bin/java -D[Standalone] -server -Xms256m -Xmx2048m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=512m -Djava.net.preferIPv4Stack=true -Dfile.encoding=UTF-8 
+
+
+$ kubectl exec -it kie-server-5dd8d58d8b-xfvr4  bash
+
+[jboss@kie-server-5dd8d58d8b-xfvr4 bin]$ ps aux
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+jboss          1  0.0  0.0  11812  2844 ?        Ss   Oct27   0:00 /bin/sh /opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0 -Dorg.kie.server.id=kie-server-kie-server-5dd8d58d8b-xfvr4 -Dorg.kie.server.user=kieserver -Dorg.kie.server.pwd=kie
+jboss        104  0.5  5.4 2979964 728328 ?      Sl   Oct27   4:37 /usr/lib/jvm/java/bin/java -D[Standalone] -server -Xms256m -Xmx1024m -Djava.net.preferIPv4Stack=true -Dfile.encoding=UTF-8 --add-exports=java.base/sun.nio.ch=ALL-UNNAMED -
+ 
+
