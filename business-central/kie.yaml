@@ -26,7 +26,8 @@ spec:
             - containerPort: 7600
             - containerPort: 8888
           securityContext:
-            privileged: true
+            runAsNonRoot: true
+            runAsUser: 1000
           volumeMounts:
             - name: nfs
               mountPath: "/data/niogit"
@@ -45,7 +46,7 @@ spec:
             - name: DNS_PING_SERVICE_NAME
               value: "kie-wb-ping-service"        
             - name: AMQ_HOST
-              value: "10.232.14.192"
+              value: "10.232.3.66"
             - name: AMQ_USER
               value: "admin"
             - name: AMQ_PASSWORD
@@ -106,7 +107,8 @@ spec:
           ports:
             - containerPort: 8080
           securityContext:
-            privileged: true
+            runAsNonRoot: true
+            runAsUser: 1000
           env:
             - name: KIE_WB_ENV_KIE_CONTEXT_PATH
               value: "business-central"
