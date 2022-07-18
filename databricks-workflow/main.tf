@@ -65,7 +65,8 @@ resource "databricks_job" "this" {
   name                = "job001"
   existing_cluster_id = "0713-052924-3l3i8nhz"
   notebook_task {
-    notebook_path = databricks_notebook.this.path
+    #notebook_path = databricks_notebook.this.path
+    notebook_path = "/Shared/project001/spark-001/Test004.py"
   }
 }
 
